@@ -7,7 +7,7 @@ class ShortPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.black,
       body: IndexedStack(
-        children: [git
+        children: [
           Container(
             margin: EdgeInsets.only(left: 290, top: 220),
             width: 70,
