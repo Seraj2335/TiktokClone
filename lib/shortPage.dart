@@ -1,120 +1,134 @@
 import 'package:flutter/material.dart';
-import 'package:http/retry.dart';
+import 'package:short_video_application/mainPage.dart';
 
-class ShortPage extends StatelessWidget {
+class HomePagee extends StatefulWidget {
+  @override
+  State<HomePagee> createState() => _HomePageeState();
+}
+
+class _HomePageeState extends State<HomePagee> {
+  int pageIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: IndexedStack(
-        children: [
-          Container(
-            margin: EdgeInsets.only(left: 290, top: 220),
-            width: 70,
-            height: MediaQuery.of(context).size.height * 0.7,
-            child: Column(children: [
-              Container(
-                  child: IconButton(
-                onPressed: null,
-                icon: Icon(
-                  Icons.description,
-                  color: Colors.white,
-                ),
-              )),
-              SizedBox(
-                height: 15,
-              ),
-              Container(
-                  child: Column(children: [
-                IconButton(
-                  onPressed: null,
-                  icon: Icon(
-                    Icons.thumb_up_outlined,
-                    color: Colors.white,
-                  ),
-                ),
-                Text(
-                  '100',
-                  style: TextStyle(color: Colors.white),
-                )
-              ])),
-              SizedBox(
-                height: 15,
-              ),
-              Container(
-                  child: Column(children: [
-                IconButton(
-                  onPressed: null,
-                  icon: Icon(
-                    Icons.thumb_down_outlined,
-                    color: Colors.white,
-                  ),
-                ),
-                Text(
-                  'Dislike',
-                  style: TextStyle(color: Colors.white),
-                )
-              ])),
-              SizedBox(
-                height: 15,
-              ),
-              Column(children: [
-                IconButton(
-                  onPressed: () {
-                    //Hello
-                  },
-                  icon: Icon(
-                    Icons.comment,
-                    color: Colors.white,
-                  ),
-                ),
-                Text(
-                  '100',
-                  style: TextStyle(color: Colors.white),
-                )
-              ]),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                  child: Column(children: [
-                IconButton(
-                  onPressed: null,
-                  icon: Icon(
-                    Icons.share,
-                    color: Colors.white,
-                  ),
-                ),
-                Text(
-                  '100',
-                  style: TextStyle(color: Colors.white),
-                )
-              ]))
-            ]),
-          ),
-          Container(
-            padding: EdgeInsets.only(left: 15, top: 10, right: 15),
-            height: 80,
-            margin: EdgeInsets.only(top: 590),
-            width: 280,
-            child: Text(
-              'Wild Animal of the roasting fields',
-              style: TextStyle(fontSize: 18, color: Colors.white),
-              overflow: TextOverflow.ellipsis,
-              maxLines: 2,
-            ),
-          )
-        ],
+      bottomNavigationBar: getFooter(),
+      body: getBody(),
+    );
+  }
+
+  Widget getFooter() {
+    List bottomItems = [
+      {"icon": Icons.home, "label": "Home", "isIcon": true},
+      {"icon": Icons.search, "label": "Discover", "isIcon": true},
+      {"icon": "", "label": "", "isIcon": false},
+      {"icon": Icons.message, "label": "Inbox", "isIcon": true},
+      {"icon": Icons.person, "label": "Me", "isIcon": true}
+    ];
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.11,
+      width: double.infinity,
+      decoration: BoxDecoration(color: Colors.black12),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: List.generate(bottomItems.length, (index) {
+            return bottomItems[index]['isIcon']
+                ? InkWell(
+                    onTap: () {
+                      selectedTab(index);
+                    },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Icon(
+                          bottomItems[index]['icon'],
+                          color: Colors.white,
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Center(
+                          child: Text(
+                            bottomItems[index]['label'],
+                            style: TextStyle(color: Colors.white, fontSize: 10),
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                : InkWell(
+                    onTap: () {
+                      selectedTab(index);
+                    },
+                    child: CircleAvatar(
+                      backgroundColor: Colors.white,
+                      radius: 30,
+                      child: Icon(
+                        Icons.add,
+                        color: Colors.black,
+                      ),
+                    ));
+          }),
+        ),
       ),
     );
   }
 
-  // Widget footer(BuildContext context) {
-  //   final size = MediaQuery.of(context).size;
-  //   return Container(
-  //     height: size.height * 0.15,
-  //     width: size.width,
-  //     color: Colors.black,
-  //   );
-  // }
+  selectedTab(index) {
+    setState(() {
+      pageIndex = index;
+    });
+  }
+
+  Widget getBody() {
+    return IndexedStack(
+      index: pageIndex,
+      children: <Widget>[
+        HomePage(),
+        Center(
+          child: Text(
+            "Discover",
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Montserrat'),
+          ),
+        ),
+        Center(
+          child: Text(
+            "Upload",
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Montserrat'),
+          ),
+        ),
+        Center(
+          child: Text(
+            "All Activity",
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Montserrat'),
+          ),
+        ),
+        Center(
+          child: Text(
+            "Profile",
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Montserrat'),
+          ),
+        )
+      ],
+    );
+  }
 }
