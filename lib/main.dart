@@ -4,7 +4,7 @@ import 'package:short_video_application/firstscreen.dart';
 import 'package:short_video_application/shortPage.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
+  // WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
 
