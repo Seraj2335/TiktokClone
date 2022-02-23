@@ -16,6 +16,8 @@ class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   late Future<List<Model>> data;
+  bool isPlaying = false;
+  // late VideoPlayerController _videoPlayerController;
 
   Future<List<Model>> getShortData() async {
     final response = await http.get(Uri.parse(
@@ -34,12 +36,23 @@ class _HomePageState extends State<HomePage>
     super.initState();
 
     _tabController = TabController(length: 142, vsync: this);
+    // _videoPlayerController = VideoPlayerController.network(
+    //     'https://www.youtube.com/watch?v=A87FplRNS6Q')
+    //   ..addListener(() {
+    //     setState(() {});
+    //   })
+    //   ..setLooping(true)
+    //   ..initialize().then((value) => _videoPlayerController.play());
+    // setState(() {
+    //   isPlaying = false;
+    // });
   }
 
   @override
   void dispose() {
     super.dispose();
     _tabController.dispose();
+    // _videoPlayerController.dispose();
   }
 
   @override
@@ -57,112 +70,55 @@ class _HomePageState extends State<HomePage>
                   controller: _tabController,
                   children: List.generate(
                       snapshot.data!.length,
-                      (index) => VideoPlayerItem(
-                          display_image: snapshot.data![index].display_image,
-                          link: snapshot.data![index].link,
-                          published: snapshot.data![index].published,
-                          source_page: snapshot.data![index].source_page,
-                          timestamp: snapshot.data![index].timestamp,
-                          title: snapshot.data![index].title))));
+                      (index) => SafeArea(
+                            child: InkWell(
+                              onTap: () {
+                                // setState(() {
+                                //   _videoPlayerController.value.isPlaying
+                                //       ? _videoPlayerController.pause()
+                                //       : _videoPlayerController.play();
+                                // });
+                              },
+                              child: Container(
+                                width: MediaQuery.of(context).size.width,
+                                height: MediaQuery.of(context).size.height,
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                      margin: EdgeInsets.only(bottom: 420),
+                                      child: Center(
+                                        child: Text(
+                                          'Following  ' + "|" + '  For You',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      height:
+                                          MediaQuery.of(context).size.height,
+                                      child: Stack(
+                                        children: [
+                                          // VideoPlayer(_videoPlayerController),
+                                          Center(
+                                              child: Icon(
+                                            Icons.play_arrow,
+                                            size: 80,
+                                            color:
+                                                Colors.white.withOpacity(0.7),
+                                          )),
+                                        ],
+                                      ),
+                                    ),
+                                    LeftPannel(
+                                      title: snapshot.data![index].title,
+                                    ),
+                                    RightPannel()
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ))));
         });
-  }
-}
-
-class VideoPlayerItem extends StatefulWidget {
-  String display_image;
-  String title;
-  int timestamp;
-  String link;
-  String published;
-  String source_page;
-  VideoPlayerItem(
-      {required this.display_image,
-      required this.link,
-      required this.published,
-      required this.source_page,
-      required this.timestamp,
-      required this.title});
-  @override
-  State<VideoPlayerItem> createState() => _VideoPlayerItemState();
-}
-
-class _VideoPlayerItemState extends State<VideoPlayerItem> {
-  late VideoPlayerController _videoController;
-
-  bool isPlaying = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _videoController = VideoPlayerController.network(widget.link)
-      ..addListener(() {
-        setState(() {});
-      })
-      ..setLooping(true)
-      ..initialize().then((value) {
-        _videoController.play();
-        setState(() {
-          isPlaying = false;
-        });
-      });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _videoController.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: InkWell(
-        onTap: () {
-          setState(() {
-            _videoController.value.isPlaying
-                ? _videoController.pause()
-                : _videoController.play();
-          });
-        },
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          child: Stack(
-            children: [
-              Container(
-                margin: EdgeInsets.only(bottom: 420),
-                child: Center(
-                  child: Text(
-                    'Following  ' + "|" + '  For You',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                child: Stack(
-                  children: [
-                    VideoPlayer(_videoController),
-                    Center(
-                        child: Icon(
-                      _videoController.value.isPlaying
-                          ? Icons.pause
-                          : Icons.play_arrow,
-                      size: 80,
-                      color: Colors.white.withOpacity(0.7),
-                    )),
-                  ],
-                ),
-              ),
-              LeftPannel(
-                title: widget.title,
-              ),
-              RightPannel()
-            ],
-          ),
-        ),
-      ),
-    );
   }
 }

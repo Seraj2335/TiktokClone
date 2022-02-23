@@ -20,9 +20,11 @@ class LeftPannel extends StatelessWidget {
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
-          margin: EdgeInsets.only(top: 520),
+          margin: EdgeInsets.only(
+            top: MediaQuery.of(context).size.height * 0.75,
+          ),
           height: MediaQuery.of(context).size.height * 0.10,
-          width: MediaQuery.of(context).size.width * 0.7,
+          width: MediaQuery.of(context).size.width * 0.75,
         )
       ],
     );

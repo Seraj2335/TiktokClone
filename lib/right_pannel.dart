@@ -14,7 +14,7 @@ class RightPannel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(
-          top: MediaQuery.of(context).size.height * .3,
+          top: MediaQuery.of(context).size.height * .29,
           right: 10,
           left: MediaQuery.of(context).size.width * 0.85),
       width: MediaQuery.of(context).size.width * 0.15,
